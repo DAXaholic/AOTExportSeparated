@@ -1,0 +1,308 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: DEV_AOTExportSeparated unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #DEV_AOTExportSeparated
+    Id 41633
+    PROPERTIES
+      Name                #DEV_AOTExportSeparated
+      Extends             #RunBase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #buildXPOFileNameForNode
+        #private FileName buildXPOFileNameForNode()
+        #{
+        #    #File
+        #
+        #    FilePath treeNodeFilePath;
+        #    FileName relativeXPOFileName;
+        #    FileName absoluteXPOFileName;
+        #    ;
+        #
+        #    treeNodeFilePath = SysTreeNode::treeNodePath2FilePath(m_CurrentNode.treeNodePath());
+        #    relativeXPOFileName = System.IO.Path::ChangeExtension(treeNodeFilePath, #xpo);
+        #    absoluteXPOFileName = m_ExportPath + relativeXPOFileName;
+        #    return absoluteXPOFileName;
+        #}
+      ENDSOURCE
+      SOURCE #classDeclaration
+        #/// <summary>
+        #///     Exports the currently selected AOT node and its childs separately into
+        #///     XPO files.
+        #/// </summary>
+        #final class DEV_AOTExportSeparated extends RunBase
+        #{
+        #    FilePath m_ExportPath;
+        #    boolean  m_OverwriteFiles;
+        #
+        #    TreeNode          m_RootNodeOfExport;
+        #    TreeNodeTraverser m_NodeTraverser;
+        #    TreeNode          m_CurrentNode;
+        #
+        #    DialogField m_DlgFldExportPath;
+        #
+        #    #define.CurrentVersion (1)
+        #    #localmacro.CurrentList
+        #        m_ExportPath
+        #    #endmacro
+        #}
+      ENDSOURCE
+      SOURCE #createMissingDirectoriesIfNecessary
+        #private void createMissingDirectoriesIfNecessary(FileName _fileName)
+        #{
+        #    FilePath directoryPath;
+        #    ;
+        #
+        #    directoryPath = System.IO.Path::GetDirectoryName(_fileName);
+        #    System.IO.Directory::CreateDirectory(directoryPath);
+        #}
+      ENDSOURCE
+      SOURCE #determineRootNodeOfExport
+        #private void determineRootNodeOfExport()
+        #{
+        #    ;
+        #
+        #    m_RootNodeOfExport = new LastAOTSelection().first();
+        #}
+      ENDSOURCE
+      SOURCE #dialog
+        #protected Dialog dialog(DialogRunbase _dialog, boolean _forceOnClient)
+        #{
+        #    #ResAppl
+        #
+        #    Dialog dlg;
+        #    ;
+        #
+        #    dlg = super(_dialog, _forceOnClient);
+        #    m_DlgFldExportPath = dlg.addFieldValue(typeid(FilePath), m_ExportPath);
+        #    return dlg;
+        #}
+      ENDSOURCE
+      SOURCE #export
+        #private void export()
+        #{
+        #    ;
+        #
+        #    this.startTraversingNodes();
+        #    while (this.nextNode())
+        #    {
+        #        if (this.isExportableNode())
+        #        {
+        #            this.exportNode();
+        #        }
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #exportNode
+        #private void exportNode()
+        #{
+        #    FileName xpoFileName;
+        #    ;
+        #
+        #    xpoFileName = this.buildXPOFileNameForNode();
+        #    this.createMissingDirectoriesIfNecessary(xpoFileName);
+        #    SysTreeNode::newTreeNode(m_CurrentNode).toFile(xpoFileName);
+        #}
+      ENDSOURCE
+      SOURCE #getFromDialog
+        #public boolean getFromDialog()
+        #{
+        #    boolean ret;
+        #    ;
+        #
+        #    ret = super();
+        #    if (ret)
+        #    {
+        #        m_ExportPath = m_DlgFldExportPath.value();
+        #    }
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #hasRootNode
+        #private boolean hasRootNode()
+        #{
+        #    ;
+        #
+        #    return (m_RootNodeOfExport != null);
+        #}
+      ENDSOURCE
+      SOURCE #isExportableNode
+        #private boolean isExportableNode()
+        #{
+        #    #TreeNodeSysNodeType
+        #
+        #    #define.BASE_ENUM         (#NT_DBENUMTYPE)
+        #    #define.CLASS             (#NT_CLASS)
+        #    #define.CONFIGURATION_KEY (#NT_CONFIGURATIONKEY)
+        #    #define.SECURITY_KEY      (#NT_SECURITYKEY)
+        #    #define.EDT_DATE          (#NT_DBDATETYPE)
+        #    #define.EDT_DATE_TIME     (#NT_DBDATETIMETYPE)
+        #    #define.EDT_ENUM          (#NT_DBENUMTYPETYPE)
+        #    #define.EDT_GUID          (#NT_DBGUIDTYPE)
+        #    #define.EDT_REAL          (#NT_DBREALTYPE)
+        #    #define.EDT_INT           (#NT_DBINTTYPE)
+        #    #define.EDT_TIME          (#NT_DBTIMETYPE)
+        #    #define.EDT_STRING        (#NT_DBSTRINGTYPE)
+        #    #define.EDT_CONTAINER     (#NT_DBQUEUETYPE)
+        #    #define.EDT_INT64         (#NT_DBINT64TYPE)
+        #    #define.FORM              (#NT_FORM)
+        #    #define.LICENSE_CODE      (#NT_DBLICENSECODE)
+        #    #define.REPORT            (#NT_REPORT)
+        #    #define.TABLE             (#NT_TABLE)
+        #    #define.MAP               (#NT_DBMAP)
+        #    #define.REFERENCE         (#NT_REFERENCE)
+        #    #define.MENU_ITEM         (#NT_FUNCITEM)
+        #    #define.JOB               (#NT_XALCODE)
+        #    #define.PROJECT           (#NT_PROJECT_NODE)
+        #    #define.TABLE_COLLECTION  (#NT_DBCOLLECTION)
+        #    #define.PERSPECTIVE       (#NT_PERSPECTIVE)
+        #    #define.VIEW              (#NT_DBVIEW)
+        #    #define.MACRO             (#NT_MCRCODE)
+        #    ;
+        #
+        #    switch (m_CurrentNode.sysNodeType())
+        #    {
+        #        case #CLASS:
+        #        case #CONFIGURATION_KEY:
+        #        case #SECURITY_KEY:
+        #        case #BASE_ENUM:
+        #        case #EDT_DATE_TIME:
+        #        case #EDT_DATE:
+        #        case #EDT_ENUM:
+        #        case #EDT_GUID:
+        #        case #EDT_REAL:
+        #        case #EDT_INT:
+        #        case #EDT_TIME:
+        #        case #EDT_STRING:
+        #        case #EDT_CONTAINER:
+        #        case #EDT_INT64:
+        #        case #LICENSE_CODE:
+        #        case #FORM:
+        #        case #REPORT:
+        #        case #PROJECT:
+        #        case #TABLE:
+        #        case #JOB:
+        #        case #TABLE_COLLECTION:
+        #        case #VIEW:
+        #        case #REFERENCE:
+        #        case #PERSPECTIVE:
+        #        case #MACRO:
+        #        case #MAP:
+        #        case #MENU_ITEM:
+        #            return true;
+        #
+        #        default:
+        #            return false;
+        #    }
+        #}
+        #
+      ENDSOURCE
+      SOURCE #new
+        #protected void new()
+        #{
+        #    ;
+        #
+        #    super();
+        #}
+      ENDSOURCE
+      SOURCE #nextNode
+        #private boolean nextNode()
+        #{
+        #    ;
+        #
+        #    m_CurrentNode = m_NodeTraverser.next();
+        #    return (m_CurrentNode != null);
+        #}
+      ENDSOURCE
+      SOURCE #pack
+        #public container pack()
+        #{
+        #    ;
+        #
+        #    return [#CurrentVersion, #CurrentList];
+        #}
+      ENDSOURCE
+      SOURCE #run
+        #public void run()
+        #{
+        #    ;
+        #
+        #    super();
+        #    this.determineRootNodeOfExport();
+        #    if (this.hasRootNode())
+        #    {
+        #        this.export();
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #startTraversingNodes
+        #private void startTraversingNodes()
+        #{
+        #    ;
+        #
+        #    m_NodeTraverser = new TreeNodeTraverser(m_RootNodeOfExport, true);
+        #}
+      ENDSOURCE
+      SOURCE #unpack
+        #public boolean unpack(container _packedObj)
+        #{
+        #    Version v;
+        #    boolean ret;
+        #    ;
+        #
+        #    v = RunBase::getVersion(_packedObj);
+        #    switch (v)
+        #    {
+        #        case #CurrentVersion:
+        #            ret = true;
+        #            [v, #CurrentList] = _packedObj;
+        #            break;
+        #
+        #        default:
+        #            ret = false;
+        #            break;
+        #    }
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #construct
+        #public static DEV_AOTExportSeparated construct()
+        #{
+        #    ;
+        #
+        #    return new DEV_AOTExportSeparated();
+        #}
+      ENDSOURCE
+      SOURCE #description
+        #public static ClassDescription description()
+        #{
+        #    ;
+        #
+        #    return "Separated AOT Export";
+        #}
+      ENDSOURCE
+      SOURCE #main
+        #public static void main(Args _args)
+        #{
+        #    DEV_AOTExportSeparated instance;
+        #    ;
+        #
+        #    instance = DEV_AOTExportSeparated::construct();
+        #    if (instance.prompt())
+        #    {
+        #        instance.run();
+        #    }
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: END
