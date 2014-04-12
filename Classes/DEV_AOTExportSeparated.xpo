@@ -156,7 +156,7 @@ Formatversion: 1
         #    #define.FORM              (#NT_FORM)
         #    #define.LICENSE_CODE      (#NT_DBLICENSECODE)
         #    #define.REPORT            (#NT_REPORT)
-        #    #define.TABLE             (#NT_TABLE)
+        #    #define.TABLE             (#NT_DBTABLE)
         #    #define.MAP               (#NT_DBMAP)
         #    #define.REFERENCE         (#NT_REFERENCE)
         #    #define.MENU_ITEM         (#NT_FUNCITEM)
