@@ -38,6 +38,10 @@ Formatversion: 1
         #///     Exports the currently selected AOT node and its childs separately into
         #///     XPO files.
         #/// </summary>
+        #/// <remarks>
+        #///     Copyright (c) 2014 Aaron Kunz
+        #///     https://github.com/DAXaholic/AOTExportSeparated
+        #/// </remarks>
         #final class DEV_AOTExportSeparated extends RunBase
         #{
         #    FilePath m_ExportPath;
