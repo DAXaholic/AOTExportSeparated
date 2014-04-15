@@ -170,6 +170,7 @@ Formatversion: 1
         #    #define.PERSPECTIVE       (#NT_PERSPECTIVE)
         #    #define.VIEW              (#NT_DBVIEW)
         #    #define.MACRO             (#NT_MCRCODE)
+        #    #define.QUERY             (#NT_QE)
         #    ;
         #
         #    switch (m_CurrentNode.sysNodeType())
@@ -201,6 +202,7 @@ Formatversion: 1
         #        case #MACRO:
         #        case #MAP:
         #        case #MENU_ITEM:
+        #        case #QUERY:
         #            return true;
         #
         #        default:
