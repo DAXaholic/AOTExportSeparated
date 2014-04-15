@@ -2,7 +2,9 @@ AOTExportSeparated
 ==================
 
 Small project for Dynamics AX 2009, which allows exporting an AOT node and
-its children into separate XPO files.
+its children into separate XPO files sorted by element type.
+This is useful for interacting with VCS such as SVN or Git. This repository
+is an example of such an export.
 
 
 Installation
