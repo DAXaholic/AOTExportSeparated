@@ -168,6 +168,7 @@ Formatversion: 1
         #    #define.REFERENCE         (#NT_REFERENCE)
         #    #define.REPORT            (#NT_REPORT)
         #    #define.SECURITY_KEY      (#NT_SECURITYKEY)
+        #    #define.SERVICE           (1321)
         #    #define.TABLE             (#NT_DBTABLE)
         #    #define.TABLE_COLLECTION  (#NT_DBCOLLECTION)
         #    #define.VIEW              (#NT_DBVIEW)
@@ -200,6 +201,7 @@ Formatversion: 1
         #        case #REFERENCE:
         #        case #REPORT:
         #        case #SECURITY_KEY:
+        #        case #SERVICE:
         #        case #TABLE:
         #        case #TABLE_COLLECTION:
         #        case #VIEW:
