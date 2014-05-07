@@ -146,63 +146,63 @@ Formatversion: 1
         #    #define.BASE_ENUM         (#NT_DBENUMTYPE)
         #    #define.CLASS             (#NT_CLASS)
         #    #define.CONFIGURATION_KEY (#NT_CONFIGURATIONKEY)
-        #    #define.SECURITY_KEY      (#NT_SECURITYKEY)
+        #    #define.EDT_CONTAINER     (#NT_DBQUEUETYPE)
         #    #define.EDT_DATE          (#NT_DBDATETYPE)
         #    #define.EDT_DATE_TIME     (#NT_DBDATETIMETYPE)
         #    #define.EDT_ENUM          (#NT_DBENUMTYPETYPE)
         #    #define.EDT_GUID          (#NT_DBGUIDTYPE)
-        #    #define.EDT_REAL          (#NT_DBREALTYPE)
         #    #define.EDT_INT           (#NT_DBINTTYPE)
-        #    #define.EDT_TIME          (#NT_DBTIMETYPE)
-        #    #define.EDT_STRING        (#NT_DBSTRINGTYPE)
-        #    #define.EDT_CONTAINER     (#NT_DBQUEUETYPE)
         #    #define.EDT_INT64         (#NT_DBINT64TYPE)
+        #    #define.EDT_REAL          (#NT_DBREALTYPE)
+        #    #define.EDT_STRING        (#NT_DBSTRINGTYPE)
+        #    #define.EDT_TIME          (#NT_DBTIMETYPE)
         #    #define.FORM              (#NT_FORM)
-        #    #define.LICENSE_CODE      (#NT_DBLICENSECODE)
-        #    #define.REPORT            (#NT_REPORT)
-        #    #define.TABLE             (#NT_DBTABLE)
-        #    #define.MAP               (#NT_DBMAP)
-        #    #define.REFERENCE         (#NT_REFERENCE)
-        #    #define.MENU_ITEM         (#NT_FUNCITEM)
         #    #define.JOB               (#NT_XALCODE)
-        #    #define.PROJECT           (#NT_PROJECT_NODE)
-        #    #define.TABLE_COLLECTION  (#NT_DBCOLLECTION)
-        #    #define.PERSPECTIVE       (#NT_PERSPECTIVE)
-        #    #define.VIEW              (#NT_DBVIEW)
+        #    #define.LICENSE_CODE      (#NT_DBLICENSECODE)
         #    #define.MACRO             (#NT_MCRCODE)
+        #    #define.MAP               (#NT_DBMAP)
+        #    #define.MENU_ITEM         (#NT_FUNCITEM)
+        #    #define.PERSPECTIVE       (#NT_PERSPECTIVE)
+        #    #define.PROJECT           (#NT_PROJECT_NODE)
         #    #define.QUERY             (#NT_QE)
+        #    #define.REFERENCE         (#NT_REFERENCE)
+        #    #define.REPORT            (#NT_REPORT)
+        #    #define.SECURITY_KEY      (#NT_SECURITYKEY)
+        #    #define.TABLE             (#NT_DBTABLE)
+        #    #define.TABLE_COLLECTION  (#NT_DBCOLLECTION)
+        #    #define.VIEW              (#NT_DBVIEW)
         #    ;
         #
         #    switch (m_CurrentNode.sysNodeType())
         #    {
+        #        case #BASE_ENUM:
         #        case #CLASS:
         #        case #CONFIGURATION_KEY:
-        #        case #SECURITY_KEY:
-        #        case #BASE_ENUM:
-        #        case #EDT_DATE_TIME:
+        #        case #EDT_CONTAINER:
         #        case #EDT_DATE:
+        #        case #EDT_DATE_TIME:
         #        case #EDT_ENUM:
         #        case #EDT_GUID:
-        #        case #EDT_REAL:
-        #        case #EDT_INT:
-        #        case #EDT_TIME:
-        #        case #EDT_STRING:
-        #        case #EDT_CONTAINER:
         #        case #EDT_INT64:
-        #        case #LICENSE_CODE:
+        #        case #EDT_INT:
+        #        case #EDT_REAL:
+        #        case #EDT_STRING:
+        #        case #EDT_TIME:
         #        case #FORM:
-        #        case #REPORT:
-        #        case #PROJECT:
-        #        case #TABLE:
         #        case #JOB:
-        #        case #TABLE_COLLECTION:
-        #        case #VIEW:
-        #        case #REFERENCE:
-        #        case #PERSPECTIVE:
+        #        case #LICENSE_CODE:
         #        case #MACRO:
         #        case #MAP:
         #        case #MENU_ITEM:
+        #        case #PERSPECTIVE:
+        #        case #PROJECT:
         #        case #QUERY:
+        #        case #REFERENCE:
+        #        case #REPORT:
+        #        case #SECURITY_KEY:
+        #        case #TABLE:
+        #        case #TABLE_COLLECTION:
+        #        case #VIEW:
         #            return true;
         #
         #        default:
