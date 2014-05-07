@@ -45,7 +45,6 @@ Formatversion: 1
         #final class DEV_AOTExportSeparated extends RunBase
         #{
         #    FilePath m_ExportPath;
-        #    boolean  m_OverwriteFiles;
         #
         #    TreeNode          m_RootNodeOfExport;
         #    TreeNodeTraverser m_NodeTraverser;
