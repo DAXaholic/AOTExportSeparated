@@ -62,8 +62,8 @@ Formatversion: 1
       ENDSOURCE
       SOURCE #classDeclaration
         #/// <summary>
-        #///     Exports the currently selected AOT node and its childs separately into
-        #///     XPO files.
+        #///     Exports the currently selected AOT nodes and their childs separately
+        #///     into XPO files.
         #/// </summary>
         #/// <remarks>
         #///     Copyright (c) 2014 Aaron Kunz
@@ -74,7 +74,7 @@ Formatversion: 1
         #    FilePath  m_ExportPath;
         #    container m_PathHistory;
         #
-        #    TreeNode          m_RootNodeOfExport;
+        #    StackBase         m_SelectedNodes;
         #    TreeNodeTraverser m_NodeTraverser;
         #    TreeNode          m_CurrentNode;
         #
@@ -99,12 +99,20 @@ Formatversion: 1
         #    System.IO.Directory::CreateDirectory(directoryPath);
         #}
       ENDSOURCE
-      SOURCE #determineRootNodeOfExport
-        #private void determineRootNodeOfExport()
+      SOURCE #determineSelectedNodes
+        #private void determineSelectedNodes()
         #{
+        #    LastAotSelection aotSelection;
+        #    TreeNode         selectedNode;
         #    ;
         #
-        #    m_RootNodeOfExport = new LastAOTSelection().first();
+        #    aotSelection = new LastAOTSelection();
+        #    for (selectedNode = aotSelection.first();
+        #         selectedNode != null;
+        #         selectedNode = aotSelection.next())
+        #    {
+        #        m_SelectedNodes.push(selectedNode);
+        #    }
         #}
       ENDSOURCE
       SOURCE #dialog
@@ -173,12 +181,12 @@ Formatversion: 1
         #    return ret;
         #}
       ENDSOURCE
-      SOURCE #hasRootNode
-        #private boolean hasRootNode()
+      SOURCE #isAnyNodeSelected
+        #private boolean isAnyNodeSelected()
         #{
         #    ;
         #
-        #    return (m_RootNodeOfExport != null);
+        #    return m_SelectedNodes.count() > 0;
         #}
       ENDSOURCE
       SOURCE #isExportableNode
@@ -283,6 +291,7 @@ Formatversion: 1
         #    ;
         #
         #    super();
+        #    m_SelectedNodes = new StackBase();
         #}
       ENDSOURCE
       SOURCE #nextNode
@@ -291,7 +300,17 @@ Formatversion: 1
         #    ;
         #
         #    m_CurrentNode = m_NodeTraverser.next();
-        #    return (m_CurrentNode != null);
+        #    if (m_CurrentNode != null)
+        #    {
+        #        return true;
+        #    }
+        #
+        #    this.startTraversingNextSelectedNode();
+        #    if (m_NodeTraverser != null)
+        #    {
+        #        return this.nextNode();
+        #    }
+        #    return false;
         #}
       ENDSOURCE
       SOURCE #pack
@@ -342,8 +361,8 @@ Formatversion: 1
         #    ;
         #
         #    super();
-        #    this.determineRootNodeOfExport();
-        #    if (this.hasRootNode())
+        #    this.determineSelectedNodes();
+        #    if (this.isAnyNodeSelected())
         #    {
         #        this.export();
         #    }
@@ -359,12 +378,29 @@ Formatversion: 1
         #    this.trimPathHistory();
         #}
       ENDSOURCE
+      SOURCE #startTraversingNextSelectedNode
+        #private void startTraversingNextSelectedNode()
+        #{
+        #    TreeNode nextSelectedNode;
+        #    ;
+        #
+        #    nextSelectedNode = m_SelectedNodes.pop();
+        #    if (nextSelectedNode != null)
+        #    {
+        #        m_NodeTraverser = new TreeNodeTraverser(nextSelectedNode, true);
+        #    }
+        #    else
+        #    {
+        #        m_NodeTraverser = null;
+        #    }
+        #}
+      ENDSOURCE
       SOURCE #startTraversingNodes
         #private void startTraversingNodes()
         #{
         #    ;
         #
-        #    m_NodeTraverser = new TreeNodeTraverser(m_RootNodeOfExport, true);
+        #    this.startTraversingNextSelectedNode();
         #}
       ENDSOURCE
       SOURCE #trimPathHistory
