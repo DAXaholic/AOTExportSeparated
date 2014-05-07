@@ -17,6 +17,33 @@ Formatversion: 1
     
     METHODS
       Version: 3
+      SOURCE #addDestinationGroupToDialog
+        #private void addDestinationGroupToDialog(Dialog _dialog)
+        #{
+        #    ;
+        #
+        #    _dialog.addGroup("Destination");
+        #    m_DlgFldExportPath = _dialog.addFieldValue(typeid(FilePath),
+        #                                               m_ExportPath);
+        #}
+      ENDSOURCE
+      SOURCE #addHistoryGroupToDialog
+        #private void addHistoryGroupToDialog(Dialog _dialog)
+        #{
+        #    int      entryIdx;
+        #    FilePath pathOfEntry;
+        #    ;
+        #
+        #    _dialog.addGroup("History");
+        #    _dialog.addText("Just enter the appropriate number to refer to a " +
+        #                    "history entry");
+        #    for (entryIdx = 1; entryIdx <= conlen(m_PathHistory); ++entryIdx)
+        #    {
+        #        pathOfEntry = conpeek(m_PathHistory, entryIdx);
+        #        _dialog.addText(strfmt("[%1] - %2", entryIdx, pathOfEntry));
+        #    }
+        #}
+      ENDSOURCE
       SOURCE #buildXPOFileNameForNode
         #private FileName buildXPOFileNameForNode()
         #{
@@ -44,7 +71,8 @@ Formatversion: 1
         #/// </remarks>
         #final class DEV_AOTExportSeparated extends RunBase
         #{
-        #    FilePath m_ExportPath;
+        #    FilePath  m_ExportPath;
+        #    container m_PathHistory;
         #
         #    TreeNode          m_RootNodeOfExport;
         #    TreeNodeTraverser m_NodeTraverser;
@@ -52,9 +80,12 @@ Formatversion: 1
         #
         #    DialogField m_DlgFldExportPath;
         #
-        #    #define.CurrentVersion (1)
+        #    #define.MaxPathHistoryEntries (9)
+        #
+        #    #define.CurrentVersion (2)
         #    #localmacro.CurrentList
-        #        m_ExportPath
+        #        m_ExportPath,
+        #        m_PathHistory
         #    #endmacro
         #}
       ENDSOURCE
@@ -83,7 +114,8 @@ Formatversion: 1
         #    ;
         #
         #    dlg = super(_dialog, _forceOnClient);
-        #    m_DlgFldExportPath = dlg.addFieldValue(typeid(FilePath), m_ExportPath);
+        #    this.addDestinationGroupToDialog(dlg);
+        #    this.addHistoryGroupToDialog(dlg);
         #    return dlg;
         #}
       ENDSOURCE
@@ -113,6 +145,15 @@ Formatversion: 1
         #    SysTreeNode::newTreeNode(m_CurrentNode).toFile(xpoFileName);
         #}
       ENDSOURCE
+      SOURCE #exportPathContainsHistoryReference
+        #private boolean exportPathContainsHistoryReference()
+        #{
+        #    ;
+        #
+        #    return str2IntOk(m_ExportPath) &&
+        #           str2int(m_ExportPath) <= conlen(m_PathHistory);
+        #}
+      ENDSOURCE
       SOURCE #getFromDialog
         #public boolean getFromDialog()
         #{
@@ -123,6 +164,11 @@ Formatversion: 1
         #    if (ret)
         #    {
         #        m_ExportPath = m_DlgFldExportPath.value();
+        #        if (this.exportPathContainsHistoryReference())
+        #        {
+        #            this.resolveHistoryReferenceInExportPath();
+        #        }
+        #        this.saveExportPathToHistoryTip();
         #    }
         #    return ret;
         #}
@@ -235,6 +281,40 @@ Formatversion: 1
         #    return [#CurrentVersion, #CurrentList];
         #}
       ENDSOURCE
+      SOURCE #prependExportPathToHistory
+        #private void prependExportPathToHistory()
+        #{
+        #    ;
+        #
+        #    m_PathHistory = conins(m_PathHistory, 1, m_ExportPath);
+        #}
+      ENDSOURCE
+      SOURCE #removeExportPathFromHistory
+        #private void removeExportPathFromHistory()
+        #{
+        #    int conIdx;
+        #    ;
+        #
+        #    do
+        #    {
+        #        conIdx = confind(m_PathHistory, m_ExportPath);
+        #        if (conIdx > 0)
+        #        {
+        #            m_PathHistory = condel(m_PathHistory, conIdx, 1);
+        #        }
+        #    } while (conIdx > 0);
+        #}
+      ENDSOURCE
+      SOURCE #resolveHistoryReferenceInExportPath
+        #private void resolveHistoryReferenceInExportPath()
+        #{
+        #    int historyIndex;
+        #    ;
+        #
+        #    historyIndex = str2int(m_ExportPath);
+        #    m_ExportPath = conpeek(m_PathHistory, historyIndex);
+        #}
+      ENDSOURCE
       SOURCE #run
         #public void run()
         #{
@@ -248,12 +328,30 @@ Formatversion: 1
         #    }
         #}
       ENDSOURCE
+      SOURCE #saveExportPathToHistoryTip
+        #private void saveExportPathToHistoryTip()
+        #{
+        #    ;
+        #
+        #    this.removeExportPathFromHistory();
+        #    this.prependExportPathToHistory();
+        #    this.trimPathHistory();
+        #}
+      ENDSOURCE
       SOURCE #startTraversingNodes
         #private void startTraversingNodes()
         #{
         #    ;
         #
         #    m_NodeTraverser = new TreeNodeTraverser(m_RootNodeOfExport, true);
+        #}
+      ENDSOURCE
+      SOURCE #trimPathHistory
+        #private void trimPathHistory()
+        #{
+        #    ;
+        #
+        #    m_PathHistory = condel(m_PathHistory, #MaxPathHistoryEntries, intmax());
         #}
       ENDSOURCE
       SOURCE #unpack
