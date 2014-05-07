@@ -80,8 +80,6 @@ Formatversion: 1
       SOURCE #dialog
         #protected Dialog dialog(DialogRunbase _dialog, boolean _forceOnClient)
         #{
-        #    #ResAppl
-        #
         #    Dialog dlg;
         #    ;
         #
