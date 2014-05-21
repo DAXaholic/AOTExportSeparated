@@ -215,6 +215,10 @@ Formatversion: 1
         #    #define.TABLE             (#NT_DBTABLE)
         #    #define.TABLE_COLLECTION  (#NT_DBCOLLECTION)
         #    #define.VIEW              (#NT_DBVIEW)
+        #    #define.WEB_CONTROL              (887)
+        #    #define.WEB_MANAGED_CONTENT_ITEM (890)
+        #    #define.WEB_PAGE_DEFINITION      (881)
+        #    #define.WEB_URL_MENU_ITEM        (864)
         #    ;
         #
         #    switch (m_CurrentNode.sysNodeType())
@@ -248,6 +252,10 @@ Formatversion: 1
         #        case #TABLE:
         #        case #TABLE_COLLECTION:
         #        case #VIEW:
+        #        case #WEB_CONTROL:
+        #        case #WEB_MANAGED_CONTENT_ITEM:
+        #        case #WEB_PAGE_DEFINITION:
+        #        case #WEB_URL_MENU_ITEM:
         #            return true;
         #
         #        default:
