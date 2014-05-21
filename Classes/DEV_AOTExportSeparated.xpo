@@ -204,6 +204,7 @@ Formatversion: 1
         #    #define.LICENSE_CODE             (#NT_DBLICENSECODE)
         #    #define.MACRO                    (#NT_MCRCODE)
         #    #define.MAP                      (#NT_DBMAP)
+        #    #define.MENU                     (#NT_MENU)
         #    #define.MENU_ITEM                (#NT_FUNCITEM)
         #    #define.PERSPECTIVE              (#NT_PERSPECTIVE)
         #    #define.PROJECT                  (#NT_PROJECT_NODE)
@@ -258,11 +259,23 @@ Formatversion: 1
         #        case #WEB_URL_MENU_ITEM:
         #            return true;
         #
+        #        case #MENU:
+        #            return this.isNotSubmenuNode();
+        #
         #        default:
         #            return false;
         #    }
         #}
         #
+      ENDSOURCE
+      SOURCE #isNotSubmenuNode
+        #private boolean isNotSubmenuNode()
+        #{
+        #    ;
+        #
+        #    return xUtilElements::exist(UtilElementType::Menu,
+        #                                m_CurrentNode.treeNodeName());
+        #}
       ENDSOURCE
       SOURCE #new
         #protected void new()
