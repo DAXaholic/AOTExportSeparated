@@ -219,6 +219,7 @@ Formatversion: 1
         #    #define.QUERY                    (#NT_QE)
         #    #define.REFERENCE                (#NT_REFERENCE)
         #    #define.REPORT                   (#NT_REPORT)
+        #    #define.RESOURCE                 (820)
         #    #define.SECURITY_KEY             (#NT_SECURITYKEY)
         #    #define.SERVICE                  (1321)
         #    #define.TABLE                    (#NT_DBTABLE)
@@ -256,6 +257,7 @@ Formatversion: 1
         #        case #QUERY:
         #        case #REFERENCE:
         #        case #REPORT:
+        #        case #RESOURCE:
         #        case #SECURITY_KEY:
         #        case #SERVICE:
         #        case #TABLE:
