@@ -150,7 +150,7 @@ Formatversion: 1
         #
         #    xpoFileName = this.buildXPOFileNameForNode();
         #    this.createMissingDirectoriesIfNecessary(xpoFileName);
-        #    SysTreeNode::newTreeNode(m_CurrentNode).toFile(xpoFileName);
+        #    m_CurrentNode.treeNodeExport(xpoFileName);
         #}
       ENDSOURCE
       SOURCE #exportPathContainsHistoryReference
